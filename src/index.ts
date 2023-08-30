@@ -1,12 +1,16 @@
-import express, {Express, Request,Response} from 'express'
+import express, {Express} from 'express'
+
+import dotenv from 'dotenv'
+dotenv.config()
 
 const app:Express = express()
+app.use(express.json())
 
-app.get('/api',(req:Request, res:Response)=>{
-    res.send('Hello TypeScript')
-})
-const port:number = 3000
+import userRouter from 'users/user.controller'
+app.use('/users', userRouter)
 
-app.listen(port, ()=>{
-    console.log("running server")
+const PORT:number = Number(process.env.PORT)
+
+app.listen(PORT, ()=>{
+    console.log("running server on PORT:", PORT)
 })
