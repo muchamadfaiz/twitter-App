@@ -2,19 +2,13 @@ import express from "express";
 import type { Request, Response } from "express";
 const router = express.Router();
 
-import {
-    createUser,
-    deleteUserById,
-    editUserById,
-    getAllUsers,
-    getUser,
-} from "./user.service";
+import * as UserService from "./user.service";
 
 // Create User
 router.post("/", async (req: Request, res: Response) => {
     try {
         const { name } = req.body;
-        const user = await createUser(name);
+        const user = await UserService.createUser(name);
         res.status(201).json({
             status: "success",
             message: "Data created successfully",
@@ -30,7 +24,7 @@ router.post("/", async (req: Request, res: Response) => {
 
 // Get All Users
 router.get("/", async (req: Request, res: Response) => {
-    const users = await getAllUsers();
+    const users = await UserService.getAllUsers();
     res.status(200).json({
         status: "success",
         data: users,
@@ -41,7 +35,7 @@ router.get("/", async (req: Request, res: Response) => {
 router.delete("/:id", async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
-        await deleteUserById(parseInt(id));
+        await UserService.deleteUserById(parseInt(id));
         res.status(200).json({
             status: "success",
             message: "Data deleted successfully",
@@ -59,7 +53,7 @@ router.get("/:id", async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
 
-        const user = await getUser(parseInt(id));
+        const user = await UserService.getUser(parseInt(id));
 
         res.status(200).json({
             status: "success",
@@ -85,10 +79,10 @@ router.put("/:id", async (req: Request, res: Response) => {
                 message: "Some fields are missing",
             });
         }
-        const user = await editUserById(parseInt(id), name);
+        const user = await UserService.editUserById(parseInt(id), name);
 
         res.status(200).json({
-            status: "succes",
+            status: "success",
             message: "Data updated succesfully",
         });
     } catch (error) {
